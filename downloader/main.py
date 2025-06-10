@@ -45,6 +45,7 @@ def main():
 
     # Target to downloader
     target = metadata.get_target_from_env()
+
     # Its up to the downloader as to what the idenitier
     # And version are used for.
     target_id, target_version = target.identifier, target.version

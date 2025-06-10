@@ -11,3 +11,5 @@
 # Files or directories to be skipped. They should be base names, not paths.
 ignore = [".venv", "dist", "build", "wheels"]
 
+[tool.pylint."messages control"]
+disable = ["missing-function-docstring", "missing-module-docstring", "missing-class-docstring", "too-many-arguments", "too-many-positional-arguments", "R0801"]

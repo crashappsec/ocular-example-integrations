@@ -20,9 +20,9 @@ import sys
 from argparse import ArgumentParser, Namespace
 from typing import List
 
-from lib import metadata, parameters, pipelines, schemas, api
+from common import metadata, parameters, pipelines, schemas, api
 
-logger = logging.getLogger(__name__ + "_downloader")
+logger = logging.getLogger(__name__ + "_crawler")
 handler = logging.StreamHandler(sys.stderr)
 logger.addHandler(handler)
 
@@ -35,7 +35,6 @@ def parse_args() -> Namespace:
 
 def main():
     args = parse_args()
-
     logger.setLevel(logging.DEBUG if args.debug else logging.INFO)
 
     ## Crawler Metadata ##
@@ -98,17 +97,18 @@ def main():
                 t.downloader,
                 t.identifier,
                 t.version,
-                pline.execution_id
+                pline.execution_id,
             )
         except (api.RequestError, api.APIError) as e:
             logger.error(
-                "Crawler %s : profile %s : downloader %s : unable to start pipeline for target %s (%s) - %s",
+                "Crawler %s : profile %s : downloader %s : "
+                "unable to start pipeline for target %s (%s) - %s",
                 crawler_name,
                 profile,
                 t.downloader,
                 t.identifier,
                 t.version,
-                e
+                e,
             )
     logger.info("Crawler %s: crawl complete", crawler_name)
 

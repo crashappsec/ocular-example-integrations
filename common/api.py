@@ -17,11 +17,14 @@ _CONTEXT_HEADER = "X-ClusterContext-Name"
 
 Resp = TypeVar("Resp")
 
+
 class RequestError(BaseException):
     pass
 
+
 class APIError(BaseException):
     pass
+
 
 def make_request(
     method: str,
@@ -33,16 +36,20 @@ def make_request(
     context_name: Optional[str] = None,
 ) -> Resp:
     if base_url is None:
-        base_url = os.getenv(constants.API_BASE_URL_ENVVAR, "http://aspm-api-server.aspm")
+        base_url = os.getenv(
+            constants.API_BASE_URL_ENVVAR, "http://aspm-api-server.aspm"
+        )
     if context_name is None:
         context_name = os.getenv(constants.CONTEXT_NAME_ENVVAR)
 
     if token is None:
         try:
-            with open(constants.SERVICETOKEN_PATH_ENVVAR, "r", encoding="utf-8") as token_file:
+            with open(
+                constants.SERVICETOKEN_PATH_ENVVAR, "r", encoding="utf-8"
+            ) as token_file:
                 token = token_file.read()
         except OSError as e:
-            raise RequestError("unable to read token: {e}") from e 
+            raise RequestError("unable to read token: {e}") from e
 
     try:
         resp = requests.request(
