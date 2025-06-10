@@ -1,0 +1,31 @@
+services:
+  uploader:
+    image: "${ASPM_IMAGE_REGISTRY:-ghcr.io}/${ASPM_EXAMPLE_UPLOADER_IMAGE_REPOSITORY:-crashappsec/aspm-example-uploader}:${ASPM_IMAGE_TAG:-local}"
+    build:
+      args:
+        - "PROGRAM=uploader"
+      tags:
+        - "${ASPM_IMAGE_REGISTRY:-ghcr.io}/${ASPM_EXAMPLE_UPLOADER_IMAGE_REPOSITORY:-crashappsec/aspm-example-uploader}:${ASPM_IMAGE_TAG:-local}"
+      platforms:
+        - linux/amd64
+        - linux/arm64
+  downloader:
+    image: "${ASPM_IMAGE_REGISTRY:-ghcr.io}/${ASPM_EXAMPLE_DOWNLOADER_IMAGE_REPOSITORY:-crashappsec/aspm-example-downloader}:${ASPM_IMAGE_TAG:-local}"
+    build:
+      args:
+        - "PROGRAM=downloader"
+      tags:
+        - "${ASPM_IMAGE_REGISTRY:-ghcr.io}/${ASPM_EXAMPLE_DOWNLOADER_IMAGE_REPOSITORY:-crashappsec/aspm-example-downloader}:${ASPM_IMAGE_TAG:-local}"
+      platforms:
+        - linux/amd64
+        - linux/arm64
+  crawler:
+    image: "${ASPM_IMAGE_REGISTRY:-ghcr.io}/${ASPM_EXAMPLE_CRAWLER_IMAGE_REPOSITORY:-crashappsec/aspm-example-crawler}:${ASPM_IMAGE_TAG:-local}"
+    build:
+      args:
+        - "PROGRAM=crawler"
+      tags:
+        - "${ASPM_IMAGE_REGISTRY:-ghcr.io}/${ASPM_EXAMPLE_CRAWLER_IMAGE_REPOSITORY:-crashappsec/aspm-example-crawler}:${ASPM_IMAGE_TAG:-local}"
+      platforms:
+        - linux/amd64
+        - linux/arm64
