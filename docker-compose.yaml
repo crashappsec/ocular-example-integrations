@@ -1,0 +1,31 @@
+services:
+  uploader:
+    image: "${OCULAR_IMAGE_REGISTRY:-ghcr.io}/${OCULAR_EXAMPLE_UPLOADER_IMAGE_REPOSITORY:-crashappsec/ocular-example-uploader}:${OCULAR_IMAGE_TAG:-local}"
+    build:
+      args:
+        - "PROGRAM=uploader"
+      tags:
+        - "${OCULAR_IMAGE_REGISTRY:-ghcr.io}/${OCULAR_EXAMPLE_UPLOADER_IMAGE_REPOSITORY:-crashappsec/ocular-example-uploader}:${OCULAR_IMAGE_TAG:-local}"
+      platforms:
+        - linux/amd64
+        - linux/arm64
+  downloader:
+    image: "${OCULAR_IMAGE_REGISTRY:-ghcr.io}/${OCULAR_EXAMPLE_DOWNLOADER_IMAGE_REPOSITORY:-crashappsec/ocular-example-downloader}:${OCULAR_IMAGE_TAG:-local}"
+    build:
+      args:
+        - "PROGRAM=downloader"
+      tags:
+        - "${OCULAR_IMAGE_REGISTRY:-ghcr.io}/${OCULAR_EXAMPLE_DOWNLOADER_IMAGE_REPOSITORY:-crashappsec/ocular-example-downloader}:${OCULAR_IMAGE_TAG:-local}"
+      platforms:
+        - linux/amd64
+        - linux/arm64
+  crawler:
+    image: "${OCULAR_IMAGE_REGISTRY:-ghcr.io}/${OCULAR_EXAMPLE_CRAWLER_IMAGE_REPOSITORY:-crashappsec/ocular-example-crawler}:${OCULAR_IMAGE_TAG:-local}"
+    build:
+      args:
+        - "PROGRAM=crawler"
+      tags:
+        - "${OCULAR_IMAGE_REGISTRY:-ghcr.io}/${OCULAR_EXAMPLE_CRAWLER_IMAGE_REPOSITORY:-crashappsec/ocular-example-crawler}:${OCULAR_IMAGE_TAG:-local}"
+      platforms:
+        - linux/amd64
+        - linux/arm64
