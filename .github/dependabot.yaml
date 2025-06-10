@@ -6,10 +6,17 @@
 # See the LICENSE file in the root of this repository for full license text or
 # visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
 
-[tool.pylint.main]
-
-# Files or directories to be skipped. They should be base names, not paths.
-ignore = [".venv", "dist", "build", "wheels"]
-
-[tool.pylint."messages control"]
-disable = ["missing-function-docstring", "missing-module-docstring", "missing-class-docstring", "too-many-arguments", "too-many-positional-arguments", "R0801"]
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    commit-message:
+      prefix: "chore(deps)"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "uv"
+    directory: "/"
+    commit-message:
+      prefix: "chore(deps)"
+    schedule:
+      interval: "monthly"

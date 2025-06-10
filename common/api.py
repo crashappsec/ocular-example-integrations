@@ -17,11 +17,14 @@ _CONTEXT_HEADER = "X-ClusterContext-Name"
 
 Resp = TypeVar("Resp")
 
+
 class RequestError(BaseException):
     pass
 
+
 class APIError(BaseException):
     pass
+
 
 def make_request(
     method: str,
@@ -41,10 +44,12 @@ def make_request(
 
     if token is None:
         try:
-            with open(constants.SERVICETOKEN_PATH_ENVVAR, "r", encoding="utf-8") as token_file:
+            with open(
+                constants.SERVICETOKEN_PATH_ENVVAR, "r", encoding="utf-8"
+            ) as token_file:
                 token = token_file.read()
         except OSError as e:
-            raise RequestError("unable to read token: {e}") from e 
+            raise RequestError("unable to read token: {e}") from e
 
     try:
         resp = requests.request(

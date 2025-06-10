@@ -8,7 +8,8 @@
 
 # This program is an 'Uploader' example.
 # Uploaders are given a list of file paths via the CLI args
-# (after the argument '--') and are expected to upload or process the results to be sent to 3rd party services
+# (after the argument '--') and are expected to upload or
+# process the results to be sent to 3rd party services
 
 # Uploaders are first defined via the api endpoint /api/v1/uploaders/{name}
 # where {name} is the identifier for the uploader.
@@ -21,7 +22,7 @@ import logging
 import sys
 from argparse import REMAINDER, ArgumentParser, Namespace
 
-from lib import metadata, parameters
+from common import metadata, parameters
 
 logger = logging.getLogger(__name__ + "_uploader")
 handler = logging.StreamHandler(sys.stderr)
