@@ -13,8 +13,6 @@ ifneq (,$(wildcard ${OCULAR_ENV_FILE}))
 	include ${OCULAR_ENV_FILE}
 endif
 
-OCULAR_ENVIRONMENT ?= development
-
 # logging level debug when using make
 OCULAR_LOGGING_LEVEL ?= debug
 
@@ -23,21 +21,15 @@ DOCKER_BUILDKIT ?= 1
 ifneq ($(DOCKER_DEFAULT_PLATFORM),)
 	export DOCKER_DEFAULT_PLATFORM
 endif
-OCULAR_IMAGE_REGISTRY ?= ghcr.io
-OCULAR_IMAGE_TAG ?= local
 
-OCULAR_EXAMPLE_CRAWLER_IMAGE_REPOSITORY ?= crashappsec/ocular-example-crawler
-OCULAR_EXAMPLE_DOWNLOADER_IMAGE_REPOSITORY ?= crashappsec/ocular-example-downloader
-OCULAR_EXAMPLE_UPLOADER_IMAGE_REPOSITORY ?= crashappsec/ocular-example-uploader
-
-OCULAR_EXAMPLE_DOWNLOADER_IMAGE ?= ${OCULAR_IMAGE_REGISTRY}/${OCULAR_EXAMPLE_DOWNLOADER_IMAGE_REPOSITORY}:${OCULAR_IMAGE_TAG}
-OCULAR_EXAMPLE_CRAWLER_IMAGE ?= ${OCULAR_IMAGE_REGISTRY}/${OCULAR_EXAMPLE_CRAWLER_IMAGE_REPOSITORY}:${OCULAR_IMAGE_TAG}
-OCULAR_EXAMPLE_UPLOADER_IMAGE ?= ${OCULAR_IMAGE_REGISTRY}/${OCULAR_EXAMPLE_UPLOADER_IMAGE_REPOSITORY}:${OCULAR_IMAGE_TAG}
+OCULAR_CRAWLER_IMG ?= ocular-example-crawler:latest
+OCULAR_DOWNLOADER_IMG ?= ocular-example-downloader:latest
+OCULAR_UPLOADER_IMG ?= ocular-example-uploader:latest
 
 export
 
 .PHONY: all
-all: build-docker
+all: docker-build-all
 
 #########
 # Build #
@@ -48,27 +40,41 @@ all: build-docker
 # Docker Build #
 ################
 
-.PHONY: build-docker build-docker-example-crawler build-docker-example-downloader build-docker-example-uploader
-build-docker:
-	@docker compose build
+.PHONY: docker-build-all
+docker-build-all: docker-build-crawler docker-build-uploader docker-build-downloader
 
-build-docker-example-crawler:
-	@docker compose build crawler
+.PHONY: docker-build-crawler
+docker-build-crawler:
+	@docker build -t ${OCULAR_CRAWLER_IMG} --build-arg PROGRAM=crawler .
 
-build-docker-example-downloader:
-	@docker compose build downloader
+.PHONY: docker-build-downloader
+docker-build-downloader:
+	@docker build -t ${OCULAR_DOWNLOADER_IMG} --build-arg PROGRAM=downloader .
 
-build-docker-example-uploader:
-	@docker compose build uploader
+.PHONY: docker-build-uploader
+docker-build-uploader:
+	@docker build -t ${OCULAR_UPLOADER_IMG} --build-arg PROGRAM=uploader .
 
 
 ##############
 # Publishing #
 ##############
 
-.PHONY: push-docker
-push-docker: build-docker
-	@docker compose push
+.PHONY: docker-push-all
+docker-push-all: docker-push-crawler docker-push-downloader docker-push-uploader
+
+.PHONY: docker-push-crawler
+docker-push-crawler:
+	@docker push ${OCULAR_CRAWLER_IMG}
+
+.PHONY: docker-push-downloader
+docker-push-downloader:
+	@docker push ${OCULAR_DOWNLOADER_IMG}
+
+.PHONY: docker-push-uploader
+docker-push-uploader:
+	@docker push ${OCULAR_UPLOADER_IMG}
+
 
 ###############
 # Development #
@@ -79,7 +85,7 @@ push-docker: build-docker
 lint:
 	@echo "Running linters ..."
 	@uv run pylint .
-	@uv run black --check 
+	@uv run black --check .
 
 fmt: fmt-code fmt-license
 

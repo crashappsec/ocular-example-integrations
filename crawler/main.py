@@ -20,7 +20,9 @@ import sys
 from argparse import ArgumentParser, Namespace
 from typing import List
 
-from common import metadata, parameters, pipelines, schemas, api
+from kubernetes import client
+
+from common import metadata, parameters, pipelines, schemas, config
 
 logger = logging.getLogger(__name__ + "_crawler")
 handler = logging.StreamHandler(sys.stderr)
@@ -36,6 +38,9 @@ def parse_args() -> Namespace:
 def main():
     args = parse_args()
     logger.setLevel(logging.DEBUG if args.debug else logging.INFO)
+    # setup kubernetes client for use
+    # with creating pipelines
+    config.init_kubernetes()
 
     ## Crawler Metadata ##
 
@@ -50,17 +55,20 @@ def main():
     # Will be 'NONE' if not set
     ## NOTE: these params are just examples, you will need to
     ## configure parameters in the definition if desired.
-    profile = parameters.get_value("PROFILE_NAME")
+    profile = parameters.get_value("PROFILE")
     if profile is None:
         profile = "default"
 
-    logger.info("Crawler %s : beginning target enumeration", crawler_name)
+    downloader = parameters.get_value("DOWNLOADER")
+    if downloader is None or downloader == "":
+        raise RuntimeError("no downloader specified")
+
+    logger.info("crawler %s : beginning target enumeration", crawler_name)
 
     targets: List[schemas.Target] = []
 
     # targets.append(schemas.Target{
     #     identifier="https://my.git.org/repo",
-    #     downloader="git",
     #     version="my-cool-branch"
     # })
 
@@ -81,31 +89,33 @@ def main():
 
     for t in targets:
         logger.info(
-            "Crawler %s : profile %s : downloader %s : starting pipeline for target %s (%s)",
+            "crawler %s : profile %s : downloader %s : starting pipeline for target %s (%s)",
             crawler_name,
             profile,
-            t.downloader,
+            downloader,
             t.identifier,
             t.version,
         )
         try:
-            pline = pipelines.start_pipeline(t, profile)
+            pline = pipelines.start_pipeline(
+                t, "example-pipeline-", profile, downloader, ttl_seconds=180
+            )
             logger.debug(
-                "Crawler %s : profile %s : downloader %s : pipeline started %s (%s) - ID: %s",
+                "crawler %s : profile %s : downloader %s : pipeline started %s (%s) - name: %s",
                 crawler_name,
                 profile,
-                t.downloader,
+                downloader,
                 t.identifier,
                 t.version,
-                pline.execution_id,
+                pline,
             )
-        except (api.RequestError, api.APIError) as e:
+        except client.ApiException as e:
             logger.error(
                 "Crawler %s : profile %s : downloader %s : "
                 "unable to start pipeline for target %s (%s) - %s",
                 crawler_name,
                 profile,
-                t.downloader,
+                downloader,
                 t.identifier,
                 t.version,
                 e,

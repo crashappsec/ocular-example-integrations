@@ -7,6 +7,3 @@
 # visit: <https://www.gnu.org/licenses/gpl-3.0.html>.
 
 # Entrypoint for the library
-# It imports all sub libraries
-
-from . import api, pipelines, schemas

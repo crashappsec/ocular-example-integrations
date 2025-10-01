@@ -14,9 +14,17 @@ updates:
       prefix: "chore(deps)"
     schedule:
       interval: "monthly"
+    groups:
+      all:
+        patterns:
+          - "*"
   - package-ecosystem: "uv"
     directory: "/"
     commit-message:
       prefix: "chore(deps)"
     schedule:
       interval: "monthly"
+    groups:
+      all:
+        patterns:
+          - "*"

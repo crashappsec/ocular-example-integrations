@@ -16,3 +16,13 @@ The repoistory has 3 example containers:
   
 For more information on how these resources are configured and used within Ocular,
 see the [Ocular docs](https://github.com/crashappsec/ocular?tab=readme-ov-file#definitions)
+
+## Building images
+
+Each resource can be built using `make docker-build-$NAME` where
+`$NAME` is one of crawler, downloader, uploader. You can also customize
+the docker tag, either through the `.env` file or CLI 
+
+```bash
+make docker-build-crawler OCULAR_CRAWLER_IMG=my-custom-registry/ocular-crawler:latest
+```

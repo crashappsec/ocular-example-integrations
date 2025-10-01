@@ -44,11 +44,11 @@ def main():
     ## Pipeline Metadata ##
 
     # Target to downloader
-    target = metadata.get_target_from_env()
+    target_id = metadata.get_target_identifier_from_env()
 
     # Its up to the downloader as to what the idenitier
     # And version are used for.
-    target_id, target_version = target.identifier, target.version
+    target_version = metadata.get_target_version_from_env()
 
     # NOTE: the version of a target is optionally, it is up
     # to the downloader to decide what the empty case should mean
@@ -58,10 +58,10 @@ def main():
 
     # The name of the downloader is also provided,
     # incase you have multiple downloaders using the same script or container
-    downloader = target.downloader
+    downloader = metadata.get_downloader_name_from_env()
 
     # Get ID of the pipeline (if needed)
-    pipeline_id = metadata.get_pipeline_id_from_env()
+    pipeline_name = metadata.get_pipeline_name_from_env()
 
     # Optionall get profile name
     profile_name = metadata.get_profile_name_from_env()
@@ -69,8 +69,8 @@ def main():
     target_dir = metadata.get_target_dir_from_env()
 
     logger.info(
-        "ID %s : profile %s : downloader %s : downloading target '%s' (%s) to %s",
-        pipeline_id,
+        "pipeline %s : profile %s : downloader %s : downloading target '%s' (%s) to %s",
+        pipeline_name,
         profile_name,
         downloader,
         target_id,
@@ -94,8 +94,8 @@ def main():
     # set in the downloader definition.
 
     logger.info(
-        "ID %s : profile %s : downloader %s: download of target '%s' (%s) to %s is complete",
-        pipeline_id,
+        "pipeline %s : profile %s : downloader %s : download of target '%s' (%s) to %s is complete",
+        pipeline_name,
         profile_name,
         downloader,
         target_id,

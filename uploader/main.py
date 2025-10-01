@@ -49,6 +49,7 @@ def main():
     ## Parameters ##
     # If a parameter is needed, use 'parameters.get_value'
     # Will be 'NONE' if not set. Parameters can be set via
+    # the definition, see the file `definition.yaml` in this directory
     my_param = parameters.get_value("MY_PARAM")
     if my_param is None:
         my_param = "default_value"
@@ -56,10 +57,10 @@ def main():
     ## Pipeline Metadata ##
 
     # Target that the pipeline was run on
-    target = metadata.get_target_from_env()
+    target_id = metadata.get_target_identifier_from_env()
 
     # ID of the pipeline
-    pipeline_id = metadata.get_pipeline_id_from_env()
+    pipeline_name = metadata.get_pipeline_name_from_env()
 
     # get_profile_name_from_env
     profile_name = metadata.get_profile_name_from_env()
@@ -69,18 +70,18 @@ def main():
     uploader_name = metadata.get_uploader_name_from_env()
 
     logger.info(
-        "ID %s : uploader %s : profile %s : uploading artifacts %s from target %s",
-        pipeline_id,
+        "pipeline %s : uploader %s : profile %s : uploading artifacts %s from target %s",
+        pipeline_name,
         uploader_name,
         profile_name,
         artifacts,
-        target,
+        target_id,
     )
 
     for artifact in artifacts:
         logger.debug(
-            "ID %s : profile %s : uploading artfact %s",
-            pipeline_id,
+            "pipeline %s : profile %s : uploading artfact %s",
+            pipeline_name,
             profile_name,
             artifact,
         )
@@ -99,7 +100,9 @@ def main():
         # If secrets or parameters are needed, they can be
         # set in the uploader definition.
 
-    logger.info("ID %s : profile %s : upload complete", pipeline_id, profile_name)
+    logger.info(
+        "pipeline %s : profile %s : upload complete", pipeline_name, profile_name
+    )
 
 
 if __name__ == "__main__":

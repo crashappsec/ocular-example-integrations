@@ -8,23 +8,34 @@
 
 import os
 
-from . import constants, schemas
+from . import constants
 
 
-def get_target_from_env() -> schemas.Target:
-    """Parses the [schemas.Target] from the enviornment."""
-    return schemas.Target(
-        downloader=os.getenv(constants.TARGET_DOWNLOADER_ENVVAR, ""),
-        identifier=os.getenv(constants.TARGET_IDENTIFIER_ENVVAR, ""),
-        version=os.getenv(constants.TARGET_VERSION_ENVVAR),
-    )
-
-
-def get_pipeline_id_from_env() -> str:
-    """Reads the ID of the current pipeline
+def get_target_identifier_from_env() -> str:
+    """Reads the target identifier for the pipeline
     from the enviornment."""
 
-    return os.getenv(constants.PIPELINE_ID_ENVVAR, "unknown")
+    return os.getenv(constants.TARGET_IDENTIFIER_ENVVAR, "unknown")
+
+
+def get_target_version_from_env() -> str:
+    """Reads the target version for the pipeline
+    from the enviornment."""
+
+    return os.getenv(constants.TARGET_VERSION_ENVVAR, "unknown")
+
+
+def get_downloader_name_from_env() -> str:
+    """Reads the downlodaer name for the current pipeline."""
+
+    return os.getenv(constants.DOWNLOADER_NAME_ENVVAR, "unknown")
+
+
+def get_pipeline_name_from_env() -> str:
+    """Reads the name of the current pipeline
+    from the enviornment."""
+
+    return os.getenv(constants.PIPELINE_NAME_ENVVAR, "unknown")
 
 
 def get_profile_name_from_env() -> str:
@@ -44,6 +55,10 @@ def get_crawler_name_from_env() -> str:
     """returns the name of the current crawler"""
 
     return os.getenv(constants.CRAWLER_NAME_ENVVAR, "unknown")
+
+
+def get_search_name_from_env() -> str:
+    return os.getenv(constants.SEARCH_NAME_ENVVAR, "unknown")
 
 
 def get_results_dir_from_env() -> str:
