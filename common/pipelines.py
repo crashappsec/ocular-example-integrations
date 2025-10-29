@@ -26,7 +26,7 @@ def start_pipeline(
         "apiVersion": f"{constants.CRD_GROUP}/{constants.CRD_VERSION}",
         "kind": "Pipeline",
         "metadata": {
-            "generate-name": name_prefix,
+            "generateName": name_prefix,
         },
         "spec": {
             "downloaderRef": {"name": downloader},

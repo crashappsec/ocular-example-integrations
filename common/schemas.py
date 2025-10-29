@@ -15,4 +15,4 @@ class Target(BaseModel):
     """Represents a target to scan"""
 
     identifier: str
-    version: Optional[str]
+    version: Optional[str] = None

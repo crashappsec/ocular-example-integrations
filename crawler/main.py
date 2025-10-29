@@ -67,10 +67,10 @@ def main():
 
     targets: List[schemas.Target] = []
 
-    # targets.append(schemas.Target{
+    # targets.append(schemas.Target(
     #     identifier="https://my.git.org/repo",
-    #     version="my-cool-branch"
-    # })
+    #     version="my-cool-branch" # optional, defaults to HEAD
+    # ))
 
     ####################
     ## YOUR CODE HERE ##
